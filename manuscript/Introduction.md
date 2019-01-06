@@ -27,4 +27,20 @@ First, you need to have a basic understanding of the Python language. I have an 
 Second, setup a development environment. We have two options in the course: you can install Python and MySQL locally in your computer, or you can follow the course using an online development platform, where you can code in the cloud from wherever you are.
 
 And third, you need to be passionate about learning, the professional way, how to become a software developer. I’m sure you have seen some online tutorials or even taken some programming courses. However, I warn you, most of the material out there is not updated or teaches the most advanced concepts and uses a lot of point-and-click tools and easy concepts. If you want to learn the easy way, this is not the course for you. But if you want to learn, and suffer a little bit at the beginning, but come out on the other end with solid knowledge, then you have found the right course.
-++  / On Camera ++
+
+{line-numbers=on,starting-line-number=32}
+~~~~~~
+module Leanpub
+  module Generate
+
+class Leanpub::Generate::BinaryLatexGenerator
+
+  attr_reader :start_chapter, :end_chapter
+  attr_accessor :results
+
+  ...
+
+end
+  end
+end
+~~~~~~
