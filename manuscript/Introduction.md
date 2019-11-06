@@ -44,4 +44,5 @@ def create_app(**config_overrides):
 ```
 
 Here's an image:
+
 ![PythonAnyhwere Welcome Page](images/1.1.png)
