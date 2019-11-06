@@ -96,12 +96,13 @@ One thing that I recommend is that you put all your projects in one folder in yo
 
 For historical Unix reasons that you can research on your own, custom applications have typically been installed in the `/opt` folder. So let’s check if you have an `/opt` folder. 
 
-In Mac type: `ls -al /`.
-In Windows type: `ls C:\` or whatever the drive letter you use. Please note we will be using Windows Powershell as our Windows terminal.
+- In Mac type: `ls -al /`.
+- In Windows type: `ls C:\` or whatever the drive letter you use. Please note we will be using Windows Powershell as our Windows terminal.
 
 If you have the `/opt` folder, that’s great. If you don’t you can create it using:
-Mac: `mkdir /opt`
-Windows: `mkdir \opt`
+
+- Mac: `mkdir /opt`
+- Windows: `mkdir \opt`
 
 If you get an error about administrative issues on Mac, use the `sudo` command, like this: `sudo mkdir /opt`. You’ll need the administrative password for that. Then make sure to change the ownership to your regular user. You can see your user by typing `whoami` and then doing `sudo chown youruser /opt`.
 
@@ -111,8 +112,8 @@ Now let’s create a folder called `simple_flask_app`. So do: `mkdir simple_flas
 
 Now we’ll install our virtualenv. Do the following:
 
-Mac: `python3 -m venv venv`
-Windows: `python -m venv venv`
+- Mac: `python3 -m venv venv`
+- Windows: `python -m venv venv`
 
 This will create a folder called `venv` where all packages will be installed after you _activate_ your virtual environment.
 
@@ -121,14 +122,17 @@ Because PythonAnywhere has restrictions on the user’s permissions, we’ll nee
 
 First, let’s create a directory where we’ll install all our apps. Normally I would use `/opt` but since we don’t have admin access, we’ll just create one in our home directory. So make sure you’re in your home directory and then create a `/opt` folder here and inside of that, our `simple_flask_app` folder.
 
-```{lang=bash,line-numbers=off}
+{lang=bash,line-numbers=off}
+```
 $ mkdir opt
 $ cd opt
 $ mkdir simple_flask_app
 ```
 
 Now we’ll create our virtualenv for our application. So use the following command:
-```{lang=bash,line-numbers=off}
+
+{lang=bash,line-numbers=off}
+```
 $ mkvirtualenv simple_flask_app -p python3.6
 ```
 
@@ -144,9 +148,10 @@ Now just type `deactivate` so that you can log out from your virtualenv.
 For your virtualenv to be _active_ you need to type a command to _activate_ it. Activating it makes the computer think that the “main” folder to install things in is our `venv` folder and not the root computer’s folder. 
 
 So how do we activate it? Simply do:
-Mac: `source venv/bin/activate`.
-Windows: ` venv\Scripts\activate`
-PythonAnywhere: `workon simple_flask_app`.
+
+- Mac: `source venv/bin/activate`.
+- Windows: ` venv\Scripts\activate`
+- PythonAnywhere: `workon simple_flask_app`.
 
 Notice that now you have a `(venv)` prompt or `(simple_flask_app)` prompt in your folder path. 
 
@@ -164,9 +169,9 @@ So make sure to change directory to your project directory by doing `cd /opt/sim
 
 Now remember, at this point, we need to activate the virtualenv, otherwise we’ll install Flask for all users in our computer, so do:
 
-Mac: `source venv/bin/activate`.
+Mac: `source venv/bin/activate`
 Windows: ` .\venv\Scripts\activate`
-PythonAnywhere: `workon simple_flask_app`.
+PythonAnywhere: `workon simple_flask_app`
 
 Make sure you see the virtualenv label in parenthesis at the beginning of the terminal prompt.
 
@@ -176,7 +181,8 @@ Pip allows you to install specific versions of these libraries using a version n
 
 And Flask is no exception, so let’s install Flask version 1.0.2 in our virtual environment. So type:
 
-```{lang=bash,line-numbers=off}
+{lang=bash,line-numbers=off}
+```
 $ pip install Flask==1.0.2
-```{lang=bash,line-numbers=off}
+```
 
