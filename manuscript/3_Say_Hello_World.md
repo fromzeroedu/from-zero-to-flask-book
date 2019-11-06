@@ -151,7 +151,7 @@ Click on the “Add a new web app” button. You will be notified of the URL tha
 
 ![App domain name](images/3.4.2.png)
 
-In the next screen you select a Python Web framework. Since we installed Flask ourselves via our virtualenv, select “Manual configuration.
+In the next screen you select a Python Web framework. Since we installed Flask ourselves via our virtualenv, select “Manual configuration".
 
 ![Manual configuration](images/3.4.3.png)
 
@@ -171,8 +171,9 @@ First, notice the “Best before date” section. If you have a free plan, that 
 
 Next, on the “Code” section you need to select the “Source code” directory. Click on the blue link and enter the following path, replacing the `username` with your own username:
 
+{lang=bash,line-numbers=off}
 ```
-/home/username/opt/simple_flask_app
+/home/your_username/opt/simple_flask_app
 ```
 
 Next on the “WSGI configuration file” you’ll need to replace the file contents with the following code. Just click on the blue link and enter this snippet, replacing the _username_ with your own username. [Save the file](https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-1/pa_wsgi.py).
