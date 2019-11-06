@@ -1,2 +1,2 @@
-1_Introduction.txt
-2_Your_Development_Environment.txt
+1_Introduction.md
+2_Your_Development_Environment.md

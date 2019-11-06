@@ -149,9 +149,9 @@ For your virtualenv to be _active_ you need to type a command to _activate_ it. 
 
 So how do we activate it? Simply do:
 
-- Mac: `source venv/bin/activate`.
-- Windows: ` venv\Scripts\activate`
-- PythonAnywhere: `workon simple_flask_app`.
+- Mac: `source venv/bin/activate`
+- Windows: `.\venv\Scripts\activate`
+- PythonAnywhere: `workon simple_flask_app`
 
 Notice that now you have a `(venv)` prompt or `(simple_flask_app)` prompt in your folder path. 
 
@@ -165,13 +165,17 @@ Now we’re ready to install Flask.
 
 It’s time to install Flask for our project. Since we don’t want Flask to be installed system-wide, we’ll use our virtualenv.
 
-So make sure to change directory to your project directory by doing `cd /opt/simple_flask_app` in Mac, `cd \opt\simple_flask_app` in Windows or `cd ~/opt/simple_flask_app` in PythonAnyhwere.
+So make sure to change directory to your project directory by doing:
+
+- `cd /opt/simple_flask_app` in Mac, 
+- `cd \opt\simple_flask_app` in Windows or
+- `cd ~/opt/simple_flask_app` in PythonAnyhwere.
 
 Now remember, at this point, we need to activate the virtualenv, otherwise we’ll install Flask for all users in our computer, so do:
 
-Mac: `source venv/bin/activate`
-Windows: ` .\venv\Scripts\activate`
-PythonAnywhere: `workon simple_flask_app`
+- Mac: `source venv/bin/activate`
+- Windows: `.\venv\Scripts\activate`
+- PythonAnywhere: `workon simple_flask_app`
 
 Make sure you see the virtualenv label in parenthesis at the beginning of the terminal prompt.
 
