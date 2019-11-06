@@ -138,3 +138,72 @@ That’s it, our first Flask application!
 Stop the application by going back to the terminal and hitting “CTRL-C” on the running task.
 
 Keep in mind that the `FLASK_APP`environment variable will be erased when you close your terminal, so if you stop here or restart your terminal or computer, you need to set the environment variable again. We will see how we can do this automatically later in the course.
+
+## Running the Application (PythonAnywhere)
+
+To run our application on PythonAnywhere, we need to register a web app on their system.
+
+So from the navigation menu click on “Web” and you will land on this screen.
+
+![Web app screen](images/3.4.1.png)
+
+Click on the “Add a new web app” button. You will be notified of the URL that has been assigned to you. Usually this is your username, dot, pythonanywhere dot com. For free accounts that’s the only option. Paid accounts can use custom URLs. Click “Next”.
+
+![App domain name](images/3.4.2.png)
+
+In the next screen you select a Python Web framework. Since we installed Flask ourselves via our virtualenv, select “Manual configuration.
+
+![Manual configuration](images/3.4.3.png)
+
+The next screen asks what Python version to use. Select “Python 3.6” and click “Next”.
+
+![Python selection](images/3.4.4.png)
+
+The next screen talks about the creation of a WSGI configuration file. Don’t worry too much about what WSGI means now, just think of it as a file that tells the PythonAnyhwere server which application should be associated with your URL. PythonAnywhere will create a default WSGI file for you to edit on the next screen. Click “Next”.
+
+![WSGI information](images/3.4.5.png)
+
+Now we’re into the “Configuration” page. There are some things to do here.
+
+First, notice the “Best before date” section. If you have a free plan, that means that at least once every three months you need to press that yellow button that reads “Run until 3 months from today”. PythonAnyhwere does this to make sure users that are using the servers are actively doing so.
+
+![Best before date](images/3.4.6.png)
+
+Next, on the “Code” section you need to select the “Source code” directory. Click on the blue link and enter the following path, replacing the `username` with your own username:
+
+```
+/home/username/opt/simple_flask_app
+```
+
+Next on the “WSGI configuration file” you’ll need to replace the file contents with the following code. Just click on the blue link and enter this snippet, replacing the _username_ with your own username. [Save the file](https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-1/pa_wsgi.py).
+
+{lang=python,line-numbers=on,starting-line-number=1}
+```
+import sys
+python_anywhere_username = 'jorge3'
+path = '/home/' + python_anywhere_username + '/opt/simple_flask_app'
+if path not in sys.path:
+    sys.path.append(path)
+
+from hello import app
+app.debug = False
+
+from werkzeug.debug import DebuggedApplication
+application = DebuggedApplication(app, evalex=True)
+```
+
+We’re almost done. Now head over to the “Virtualenv” section and select the blue link and just type “simple\_flask\_app”. PythonAnywhere will auto-complete with the full path when you hit enter.
+
+So the whole thing should look like this, but with your own username.
+
+![The whole PythonAnywhere setup](images/3.4.7.png)
+
+Finally, go to the top of the page and click on the green button on the “Reload” section.
+
+![Reload button](images/3.4.8.png)
+
+Now click on the blue URL on the top or enter “yourusername.pythonanywhere.com” in the browser. You should see the “Hello, World!” text.
+
+![PythonAnyhwere Hello World](images/3.4.9.png)
+
+If something didn’t work, just re-check the steps and make sure you’re not missing something. It’s usually some silly small detail you missed.
