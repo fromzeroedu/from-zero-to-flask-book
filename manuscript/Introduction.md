@@ -1,6 +1,6 @@
 # Introduction
 
-## Welcome
+## Welcome to the Book!
 
 Hi and welcome to “From Zero to Flask”. My name is Jorge Escobar and I have been building professional Python applications for the last 10 years and now want to teach you, from scratch, how to build Flask applications using the techniques used in real world tech companies.
 
@@ -31,6 +31,7 @@ Second, setup a development environment. We have two options in the course: you 
 And third, you need to be passionate about learning, the professional way, how to become a software developer. I’m sure you have seen some online tutorials or even taken some programming courses. However, I warn you, most of the material out there is not updated or teaches the most advanced concepts and uses a lot of point-and-click tools and easy concepts. If you want to learn the easy way, this is not the course for you. But if you want to learn, and suffer a little bit at the beginning, but come out on the other end with solid knowledge, then you have found the right course.
 
 {lang=python,line-numbers=on,starting-line-number=32}
+
 ```
 from flask import Flask
 
