@@ -42,3 +42,6 @@ db = MongoEngine()
 def create_app(**config_overrides):
     app = Flask(__name__)
 ```
+
+Here's an image:
+![PythonAnyhwere Welcome Page](images/1.1.png)
