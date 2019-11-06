@@ -90,13 +90,51 @@ And that’s it! This is what the whole file looks like:
 
 ![Hello World!](images/3.2.5.png)
 
-In the Atom editor, notice how there’s a little blue circle on the tab? That means this file hasn’t been saved. Hit “CTRL+s” on Windows or “Command+s” on Mac to save it[^1].
+In the Atom editor, notice how there’s a little blue circle on the tab? That means this file hasn’t been saved. Hit “CTRL+s” on Windows or “Command+s” on Mac to [save it](https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-1/hello.py).
 
 On Python Anywhere, notice how it says “unsaved changes” on the top next to the file’s path. Hit the green “Save” button to save the file.
 
 Now we’ll see how to run this application and see it in our browser. We have two different lessons depending if you’re in Windows or Mac, or if you’re in PythonAnywhere. Skip to the one that’s right for you.
 
+## Running the Application (Windows and Mac)
 
+Let’s see how we run the application on Windows or Mac.
 
-[^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-1/hello.py
+Once again, make sure to have your virtualenv activated, so that the word `(venv)` appears on the command prompt. If it doesn’t, activate it.
 
+To be able to run the application, we first need to set an environment variable to tell Flask what application we want to run and then use the `flask run` command.
+
+In Windows Powershell, set the environment variable with the following command:
+
+{lang=bash,line-numbers=off}
+```
+$env:FLASK_APP = "hello.py"
+```
+
+In Mac OS, you set it by doing:
+
+{lang=bash,line-numbers=off}
+```
+export FLASK_APP=hello
+```
+
+We can now run the application by typing the following command:
+
+{lang=bash,line-numbers=off}
+```
+flask run
+```
+
+Now open your browser and type this URL: `http://127.0.0.1:5000/`
+
+That `127.0.0.1` is also called localhost and it’s a special IP address that points back to your own machine.
+
+You should now see the string “Hello, World!” appear in your browser.
+
+![Hello there!](images/3.3.1.png)
+
+That’s it, our first Flask application!
+
+Stop the application by going back to the terminal and hitting “CTRL-C” on the running task.
+
+Keep in mind that the `FLASK_APP`environment variable will be erased when you close your terminal, so if you stop here or restart your terminal or computer, you need to set the environment variable again. We will see how we can do this automatically later in the course.
