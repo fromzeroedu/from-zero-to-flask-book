@@ -1,4 +1,4 @@
-# Your Python Flask Development Environment
+# Your Python Flask Development Environment <!-- 2.1 -->
 
 Like I mentioned earlier, we have two options to setup our Python Flask Development Environment.
 
@@ -8,7 +8,7 @@ The second is to use an online python development environment. Here you will sig
 
 Select the one that’s appropriate for you in the following lessons.
 
-## Installing Python3 on Mac with Homebrew
+## Installing Python3 on Mac with Homebrew <!-- 2.2 -->
 
 My favorite package manager for the Mac is [Homebrew](https://brew.sh) and that’s what we’ll use to install Python 3.
 
@@ -31,7 +31,7 @@ To make sure Python 3 was installed properly, type `python3 -V`.
 
 And that’s it. Now we can begin our course.
 
-## Installing Python3 on Windows 10 with Chocolatey
+## Installing Python3 on Windows 10 with Chocolatey <!-- 2.3 -->
 
 My favorite package manager for Windows is [Chocolatey](https://chcolatey.org) and that’s what we’ll use to install Python 3.
 
@@ -54,7 +54,7 @@ To make sure Python 3 was installed properly, type `python -V`.
 
 And that’s it. Now we can begin our course.
 
-## The Cloud-based Python Development Environment 
+## The Cloud-based Python Development Environment <!-- 2.4 -->
 
 I’m constantly searching for the best Python cloud development environment and I keep coming back to PythonAnywhere. They are completely free but have really good plans, they have amazing customer service and they have MySQL and Postgres support built in.
 
@@ -66,21 +66,21 @@ To be fully open, with this link I get a small commission if you sign up for a p
 
 When you land on the page, you will see a welcome page. Click on the green button to start the process.
 
-![](images/2.4.1.png)
+![Figure 2.4.1](images/2.4.1.png)
 
 Here you will be presented with the different plans. For the purposes of this course, the beginner account is more than enough. If you’re thinking of hosting a personal site with your own domain or want better speed and performance, choose any of the paid plans.
 
 So go ahead and create the account. You will be asked for a username, email and password.
 
-![](images/2.4.2.png)
+![Figure 2.4.2](images/2.4.2.png)
 
 Make sure to confirm your email with the link they’ll send you.
 
 And that’s it — you will arrive to the Dashboard. Don’t worry about this yet, we’ll start covering how to do all the stuff in the coming sections.
 
-![](images/2.4.3.png)
+![Figure 2.4.3](images/2.4.3.png)
 
-## Virtual Environments
+## Virtual Environments <!-- 2.5 -->
 
 One of the fundamental tools of your Python development environment is the concept of virtual environments or _virtualenvs_.
 
@@ -90,7 +90,7 @@ Why is that important? Because each project you work on will use different libra
 
 So let’s go ahead and create our first project’s folder and virtual environment. Since PythonAnywhere’s handling of web apps is different, please skip to that section.
 
-### Windows and Mac Virtualenv Setup
+### Windows and Mac Virtualenv Setup <!-- 2.5.1 -->
 
 One thing that I recommend is that you put all your projects in one folder in your computer. It’s not a good practice to just have projects lying around in different folders in your computer.
 
@@ -117,7 +117,7 @@ Now we’ll install our virtualenv. Do the following:
 
 This will create a folder called `venv` where all packages will be installed after you _activate_ your virtual environment.
 
-### PythonAnywhere Virtualenv Setup
+### PythonAnywhere Virtualenv Setup <!-- 2.5.2 -->
 Because PythonAnywhere has restrictions on the user’s permissions, we’ll need to create our directory using PythonAnyhwere’s custom setup.
 
 First, let’s create a directory where we’ll install all our apps. Normally I would use `/opt` but since we don’t have admin access, we’ll just create one in our home directory. So make sure you’re in your home directory and then create a `/opt` folder here and inside of that, our `simple_flask_app` folder.
@@ -143,7 +143,7 @@ Write down that path somewhere, as we’ll need it in a future step.
 
 Now just type `deactivate` so that you can log out from your virtualenv.
 
-### Activation and Deactivation
+### Activation and Deactivation <!-- 2.5.3 -->
 
 For your virtualenv to be _active_ you need to type a command to _activate_ it. Activating it makes the computer think that the “main” folder to install things in is our `venv` folder and not the root computer’s folder. 
 
@@ -161,7 +161,7 @@ To deactivate, just type `deactivate` in all platforms. Notice how the `(venv)` 
 
 Now we’re ready to install Flask.
 
-## Installing Flask
+## Installing Flask <!-- 2.6 -->
 
 It’s time to install Flask for our project. Since we don’t want Flask to be installed system-wide, we’ll use our virtualenv.
 

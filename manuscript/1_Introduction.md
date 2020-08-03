@@ -1,4 +1,4 @@
-# Introduction
+# Introduction <!-- 1.1 -->
 
 Hi and welcome to “From Zero to Flask”. My name is Jorge Escobar and I have been building professional Python applications for the last 10 years and now want to teach you, from scratch, how to build Flask applications using the techniques used in real world tech companies.
 
