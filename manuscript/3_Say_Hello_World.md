@@ -258,7 +258,7 @@ Save the file[^3].
 
 On PythonAnywhere there’s a handy reload server button on the file editor. 
 
-![Figure 3.5.2.1](images/3.5.2.1)
+![Figure 3.5.2.1](images/3.5.2.1.png)
 
 I suggest when you work with PythonAnywhere, you have two tabs open on your browser: in one you’d have your code editor and on the other your public webpage. Whenever you do a code change, save the file, hit the “reload servers” button and then go the tab with your application and reload the page.
 
@@ -267,7 +267,7 @@ One word of caution. When you’re done debugging, I suggest you turn debugging 
 ## The Debug Stack <!-- 3.6 -->
 When you reload the page, you’ll see something like this:
 
-![Figure 3.6.1](images/3.6.1)
+![Figure 3.6.1](images/3.6.1.png)
 
 It’s a long page, and as you scroll down you will see the error pointed out at the bottom:
 
@@ -291,3 +291,104 @@ Before we move to the next lesson, go ahead and delete line 6, so that our appli
 [^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-2/pa\_wsgi.py
 
 [^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-2/hello.py
+
+# Templates <!-- 3.7 -->
+As you build your application, the pages we return to the user will start getting more and more complicated. It would get pretty messy if you had each function with a return variable several dozen lines long.
+
+So most web frameworks work using a design pattern called Model-View-Controller, or MVC.
+
+Design patterns are a topic for another course, but just know that there are some best practices to approach computer problems that are well known, so that you don’t have to reinvent the wheel. As your career advances, it’s good to get acquainted with them. So write that down on your reading list.
+
+Back to MVC, this pattern basically advocates that your application is divided into three main components.
+
+- A Model, which is a file or set of files which are dedicated to reading and writing from your database
+- A View, which is a file or set of files that deal with the presentation layer. In Web Applications, this would be HTML, CSS and JavaScript
+- And a Controller, which is the file or set of files that coordinate the user requests and loads and saves data using the models and presents it back using the views
+
+![Figure 3.7.1](images/3.7.1.png)
+
+In Flask, the Views of the MVC model are handled by _templates_. Templates are files that have as their input a set of variables called a _context_ and usually outputs HTML.
+
+So let’s go back to our script. You should have your virtual environment activated and have Flask running.
+
+Let’s create a `templates` folder. Flask has a couple of special  directories that it looks for in every application and `templates` is one of them.
+
+In Windows and Mac, go to your Atom editor, select the `simple_flask_app` folder and hit “Shift-A”. You will see a popup that allows you to enter the name of the folder. Enter `templates`. When you hit the folder the first time, it might contract and not show the folders. Just click on it again to expand. You should now see the templates folder in there.
+
+In PythonAnywhere, go to your “hamburger” menu on the top right and select “Files”. On “Directories”, select “opt” and then “simple\_flask\_app” and then enter “templates” on the “Directories” section and click on the “New directory” button.
+
+We will now create an HTML file for the index page. 
+
+In Windows and Mac, click on the `templates` folder and now hit “a”. You will see a popup to enter the name of a new file inside the `templates` folder. You will see the directory in the input field. Make sure to write after it “index.html” and press enter.
+
+![Figure 3.7.2](images/3.7.2.png)
+
+In PythonAnywhere you should still be on the Files tab. Make sure the path on the upper left says “/home/_your\_username_/opt/simple\_flask\_app/templates”, and then write “index.html” on the “Files” section, and then click the “New file” button.
+
+![Figure 3.7.3](images/3.7.3.png)
+
+We can now enter some HTML content in here. So let’s just write the following:
+
+```
+<h1>Index Page</h1>
+```
+
+The `h1` open and closing elements denote that the string `Index Page` is a header level 1, which is the largest. Notice how the first element doesn’t have a slash and the second one does? This tells HTML that the first is the _opening_ tag and the second is the _closing_ tag.
+
+I won’t go into detail on HTML, but if you follow along you’ll get the hang of it. You can also read a quick [introduction to HTML](https://www.w3schools.com/html/html_intro.asp) in the [w3schools.com](https://www.w3schools.com) website.
+
+Save the file and now go back to the `hello.py` and instead of returning the `Index Page` string on line 6, we’ll do the following:
+
+{lang=python,line-numbers=on,starting-line-number=6}
+```
+return render_template('index.html')
+```
+
+One last thing. On line 1, we need to import the `render_template` function, so after the `import Flask` add a comma and add `render_template`, so that the whole line looks like this:
+
+{lang=python,line-numbers=on,starting-line-number=1}
+```
+from flask import Flask, render_template
+```
+
+Now save the file[^1] and head over to your root URL. Make sure it’s the one without any parts after the slash. You should see the Index Page displayed on the browser.
+
+![Figure 3.7.4](images/3.7.4.png)
+
+In PythonAnywhere, remember you need to save and then click on the reload server button. Once the reload is completed, go to your site’s tab and navigate to the root URL.
+
+![Figure 3.7.5](images/3.7.5.png)
+
+As you can see, the user sees what we wrote in the HTML file and now we can let that file handle anything output related and keep all the routing and logic in the Python file.
+
+But now let’s see how we can pass information down to the template based on the user’s input. The variables passed to the template are collectively called _context_.
+
+In the second route we have the `hello(planet)` function that outputs whatever number the user wrote on the second part of the URL.
+
+So let’s create another template on the templates folder. We’ll do `hello.html` with the following HTML:
+
+{lang=html,line-numbers=on,starting-line-number=1}
+```
+<h1>Hello, {{ t_planet }}</h1>
+```
+
+I called it `t_planet` to make it clear this is the template’s `planet` variable. Notice how we use double curly brackets instead of the one we use for the `f` string.
+
+Now the template will print whatever the value of `t_planet` it gets in the context.
+
+So how do pass the context to the template? Modify line 10 with the following:
+
+{lang=python,line-numbers=on,starting-line-number=10}
+```
+return render_template('hello.html', t_planet=planet)
+```
+
+We’re assigning the template’s `t_planet` variable to the value of the `planet` variable we get from the URL part.
+
+Save both files[^2] and head over to that URL using any number you want. Now try changing the number to something else and pressing enter. You’ll see the `Hello` output changes.
+
+
+
+[^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-7/hello.py
+
+[^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/tree/step-8
