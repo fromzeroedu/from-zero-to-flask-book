@@ -392,3 +392,65 @@ Save both files[^2] and head over to that URL using any number you want. Now try
 [^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-7/hello.py
 
 [^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/tree/step-8
+
+# The url\_for() Function <!-- 3.8 -->
+One thing you will do often in your templates and controllers will be to put links to other pages.
+
+So for example, let’s add a link from the index page to the hello page in our application.
+
+Modify the `index.html` by adding the following link on line 3:
+
+{lang=html,line-numbers=on,starting-line-number=3}
+```
+<a href="/hello/4">Hello</a>
+```
+
+This HTML tag is called ‘a’ or ‘anchor’ and it allows you to link the current page to another page.
+
+Save the file[^1] and head over to the index page. You should see this:
+
+![Figure 3.8.1](images/3.8.1.png)
+
+If you click on the “Hello” link, you’re taken to the hello route.
+
+But let’s say now we figure out that we want to change the URL of that function to “greeting”. So on line 8 go ahead and change the route to read:
+
+{lang=python,line-numbers=on,starting-line-number=8}
+```
+@app.route('/greeting/<int:planet>')
+```
+
+Save the file[^2] and on your browser go to the index page and click on the “Hello” link. You will get an error.
+
+Now it would be easy to just update the `hello.html` template with the new `/greeeting` URL. But more often than not, you will have dozens or hundreds of links like this in your application.
+
+So instead of hardcoding the URL, Flask provides a function called `url_for` that allows us to tie the URL with the function _name_ instead of the _route_, as function names will not change as much.
+
+So let’s do that. Go to the `index.html` and replace the `href` with the following:
+
+{lang=html,line-numbers=on,starting-line-number=3}
+```
+<a href="{{ url_for('hello', planet=4) }}">Hello</a>
+```
+
+Save the file[^3] and go to the index page on the browser and reload.
+
+If you hover over the link and look at the address on the lower bar of the browser, you’ll notice the URL is properly coded. Click on it and you’ll get to the “hello” page with no errors.
+
+Now go back to the `hello.py` file and change the route back to `hello`, like so:
+
+{lang=html,line-numbers=on,starting-line-number=8}
+```
+@app.route('/hello/<int:planet>')
+```
+
+Save the file[^4] and reload the Index page. You will see the link works perfectly fine and now generates the updated URL automatically.
+
+
+[^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-9/templates/index.html
+
+[^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-10/hello.py
+
+[^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-11/templates/index.html
+
+[^4]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-12/hello.py
