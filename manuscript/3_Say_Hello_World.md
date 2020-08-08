@@ -454,3 +454,68 @@ Save the file[^4] and reload the Index page. You will see the link works perfect
 [^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-11/templates/index.html
 
 [^4]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-12/hello.py
+
+# The Static Folder <!-- 3.9 -->
+There are certain files that don’t need to be processed by our controller, because they’re always the same. The majority of these are presentation-centric files, like CSS or JavaScript files that improve the user interaction.
+
+Flask reserves a folder for these called `static`, and just like the `templates` folder, it’s a special folder.
+
+We won’t dive too much on these types of files in this course, but let’s say we want to make the text we have a little prettier on our site. CSS files allow us to do that by assigning fonts and color to our tags.
+
+So create a `static` folder on the app’s root, just like we did with `templates`.
+
+Now inside the folder, create a file called “base.css” and enter the following:
+
+{lang=css,line-numbers=on,starting-line-number=1}
+```
+h1 {
+  color: red;
+  font-family: Verdana;
+}
+```
+
+This will make our `h1` tags to be red and with a Verdana font.
+
+Save the file[^1] and now let’s change our `index.html` to include the new `base.css` file. We can do that by changing the file to look like the following.
+
+{lang=html,line-numbers=on,starting-line-number=1}
+```
+<html>
+<head>
+  <title>Index Page</title>
+  <link rel="stylesheet" href="static/base.css" />
+</head>
+<body>
+<h1>Index Page</h1>
+
+<a href="{{ url_for('hello', planet=4) }}">Hello</a>
+</body>
+</html>
+```
+
+Here we have a more standard HTML file. All HTML files should declare themselves as HTML with the `<html>` opening and closing tags, then define a header section that contains information about the page and helper files, like CSS or Javascript and defined with the `<head>`opening and closing tags and finally a main body where the content goes, defined by the `<body>` opening and closing tags.
+
+Save the file[^2] and reload your browser. It should look like this:
+
+![Figure 3.9.1](images/3.9.1.png)
+
+If for some reason it doesn’t, it’s because static files are often cached by the server and the browser. Quit your browser and restart the `flask` server and open the url again.
+
+Even though this is technically working, there’s a potential issue here. Just like the page URLs can change, the location of the static folder can also change. The application can point to another directory within the server or another server altogether.
+
+For that, Flask has a special `url_for` method that will set the proper URL for your application, so you don’t have to worry about that.
+
+So on `index.html` change the stylesheet line to look like the following:
+
+{lang=html,line-numbers=on,starting-line-number=4}
+```
+<link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}" />
+```
+
+Save the file[^3] and reload the browser. You should see the same output, but your `base.css` file URL is now dynamically generated.
+
+[^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-12/static/base.css
+
+[^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-12/templates/index.html
+
+[^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-13/templates/index.html
