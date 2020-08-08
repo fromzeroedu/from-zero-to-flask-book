@@ -1000,10 +1000,10 @@ Next, change the POST code to look like the following:
 
 {lang=python,line-numbers=on,starting-line-number=17}
 ```
-		first_name = request.values.get('first_name')
-    last_name = request.values.get('last_name')
-    session['first_name'] = first_name
-    return redirect(url_for('registered'))
+        first_name = request.values.get('first_name')
+        last_name = request.values.get('last_name')
+        session['first_name'] = first_name
+        return redirect(url_for('registered'))
 ```
 
 Notice how the Flask `session` is a dictionary. We can store any data we want using any key we want. At that point Flask will create the session’s corresponding cookie in the user’s local filesystem.
