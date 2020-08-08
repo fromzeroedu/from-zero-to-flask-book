@@ -942,9 +942,9 @@ Then modify the POST section to look like this:
 
 {lang=python,line-numbers=on,starting-line-number=17}
 ```
-		response = make_response(redirect(url_for('registered')))
-        response.set_cookie('first_name', first_name)
-        return response
+  response = make_response(redirect(url_for('registered')))
+  response.set_cookie('first_name', first_name)
+  return response
 ```
 
 So what we’re doing here is “catching” the redirect on a variable called `response`, and then set the cookie called `first_name` on the response itself. Finally we return the whole thing to the browser.
@@ -954,7 +954,7 @@ Then, on the `thank_you` page, we can read the cookie from the request and displ
 {lang=python,line-numbers=on,starting-line-number=24}
 ```
 	first_name = request.cookies.get('first_name')
-    return f'Thank you, {first_name}!'
+  return f'Thank you, {first_name}!'
 ```
 
 This is something you need to remember and that you will probably miss the first few times you use cookies: Cookies are set in one page and are available only when you either reload the page or go to another page. 
@@ -1001,9 +1001,9 @@ Next, change the POST code to look like the following:
 {lang=python,line-numbers=on,starting-line-number=17}
 ```
 		first_name = request.values.get('first_name')
-        last_name = request.values.get('last_name')
-        session['first_name'] = first_name
-        return redirect(url_for('registered'))
+    last_name = request.values.get('last_name')
+    session['first_name'] = first_name
+    return redirect(url_for('registered'))
 ```
 
 Notice how the Flask `session` is a dictionary. We can store any data we want using any key we want. At that point Flask will create the session’s corresponding cookie in the user’s local filesystem.
@@ -1012,7 +1012,7 @@ Finally on the `thank_you` page, you can retrieve the value for the `first_name`
 
 {lang=python,line-numbers=on,starting-line-number=25}
 ```
-first_name = session.get('first_name')
+  first_name = session.get('first_name')
 ```
 
 Save the file[^2] and check it out. Works exactly the same.
