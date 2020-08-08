@@ -931,13 +931,17 @@ For example, if you go to Amazon.com and you log in, Amazon stores a cookie with
 
 Let’s try setting a cookie for our “Thank You” page.
 
-First, on line 1, add `make_response` at the end, like this:
-```python
+Open `hello.py` and on line 1, add `make_response` at the end, like this:
+
+{lang=python,line-numbers=on,starting-line-number=1}
+```
 from flask import Flask, render_template, request, redirect, url_for, make_response
 ```
 
 Then modify the POST section to look like this:
-```python
+
+{lang=python,line-numbers=on,starting-line-number=17}
+```
 		response = make_response(redirect(url_for('registered')))
         response.set_cookie('first_name', first_name)
         return response
@@ -946,7 +950,9 @@ Then modify the POST section to look like this:
 So what we’re doing here is “catching” the redirect on a variable called `response`, and then set the cookie called `first_name` on the response itself. Finally we return the whole thing to the browser.
 
 Then, on the `thank_you` page, we can read the cookie from the request and display it back:
-```python
+
+{lang=python,line-numbers=on,starting-line-number=24}
+```
 	first_name = request.cookies.get('first_name')
     return f'Thank you, {first_name}!'
 ```
@@ -957,13 +963,13 @@ When you first set your cookie, you won’t be able to read in the same page you
 
 Now save the file[^1] and check it out.
 
-![The John cookie](Screen%20Shot%202018-05-10%20at%208.01.15%20AM.png)
+![Figure 3.12.1](images/3.12.1.png)
 
 Notice how we don’t see the name “John” anywhere on the URL.
 
 There is a downside to this method, and that is related to security. We’ll see that next.
 
-## Sessions
+### Sessions <!-- 3.12.1 -->
 Cookies are stored in the local user’s hard drive unencoded, i.e., if you knew the folder where your cookies are stored, you would find there’s a text file where you can read that the `first_name` cookie is set to “John”.
 
 Now it’s hard for someone to gain access to your computer, but not impossible. And imagine if we not only had your first name, but also your credit card number or your government ID number? They would be lying around your hard drive, unprotected.
@@ -972,19 +978,28 @@ Sessions come to the rescue. A session is essentially a randomly generated strin
 
 So let’s change our code to use sessions instead.
 
-First, replace `make_response` with `session`.
+Once again open `hello.py` and replace `make_response` with `session`.
+
+{lang=python,line-numbers=on,starting-line-number=24}
+```
+from flask import Flask, render_template, request, redirect, url_for, session
+```
 
 Next we need to add a secret key. Remember how I explained that the session data is encrypted on the server side? For that to work we need to set a randomly generated long string, sort of like a password, that Flask can then use as a unique method to encrypt the data, different from any other Flask application.
 
 So add the following line after your `app` instantiation:
-```python
+
+{lang=python,line-numbers=on,starting-line-number=4}
+```
 app.secret_key = 'my_secret_password'
 ```
 
 Now that’s not a very secure key, but it’ll do for now.
 
 Next, change the POST code to look like the following:
-```python
+
+{lang=python,line-numbers=on,starting-line-number=17}
+```
 		first_name = request.values.get('first_name')
         last_name = request.values.get('last_name')
         session['first_name'] = first_name
@@ -994,13 +1009,17 @@ Next, change the POST code to look like the following:
 Notice how the Flask `session` is a dictionary. We can store any data we want using any key we want. At that point Flask will create the session’s corresponding cookie in the user’s local filesystem.
 
 Finally on the `thank_you` page, you can retrieve the value for the `first_name` session by doing:
-```python
+
+{lang=python,line-numbers=on,starting-line-number=25}
+```
 first_name = session.get('first_name')
 ```
 
 Save the file[^2] and check it out. Works exactly the same.
 
 If you want to generate a more secure secret key, just run this command in your terminal:
+
+{lang=bash,line-numbers=off}
 ```
 python -c 'import os; print(os.urandom(16))'
 ```
