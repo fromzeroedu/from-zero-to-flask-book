@@ -519,3 +519,113 @@ Save the file[^3] and reload the browser. You should see the same output, but yo
 [^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-12/templates/index.html
 
 [^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-13/templates/index.html
+
+# Template inheritance <!-- 3.10 -->
+If you’re still on the index page of the application and click on the “Hello” link, you’ll notice our “Hello” page’s title didn’t change to red like the one on `index.html`.
+
+That’s because our `hello.html` file is not including the CSS static file.
+
+Now we could copy and paste all the HTML we did for the index page, but you can see how this could be problematic and violates the DRY principle: don’t repeat yourself.
+
+Flask knows this and it features something called “Template Inheritance” which allows us to create common templates with sections that can be overridden by the active template, sort of how class inheritance works.
+
+Let’s see how we do that.
+
+First, we’re going to define a “base.html” file that is going to be the basic template for all of the templates. Go ahead and create `base.html` as an empty file on the templates folder.
+
+Now go ahead and cut from `index.html` the first 6 lines and the last two lines, leaving only the `<h1>` and the `<a href>` lines and paste them on `base.html`[^1].
+
+Now we need two steps for the template inheritance to work.
+
+First on `index.html` we need to _extend_ the `base.html` template. For that we insert the following statement on line 1:
+
+{lang=html,line-numbers=on,starting-line-number=1}
+```
+{% extends "base.html" %}
+```
+
+Now when `index.html` is rendered, it will use `base.html` as its parent. But now we need to tell Flask where the content of `index.html` will be inserted on `base.html`.
+
+That’s the second step, and it has two parts. 
+
+First, in `base.html` Between the `<body>` tags insert the following:
+
+{lang=html,line-numbers=on,starting-line-number=8}
+```
+{% block content %}{% endblock %}
+```
+
+What this line is saying is that templates that extend this template can insert content in here using the `content` identifier.
+
+Now on `index.html` we need to wrap the whole code with the same block:
+
+{lang=html,line-numbers=on,starting-line-number=1}
+```
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Index Page</h1>
+
+<a href="{{ url_for('hello', planet=4) }}">Hello</a>
+
+{% endblock %}
+```
+
+Save both files[^2] and reload the index page. You should see the exact same result.
+
+But here’s where you’ll see the value of this.
+
+Open the `hello.html` file and insert the extend and block content lines at the top and the end block at the bottom like so:
+
+{lang=html,line-numbers=on,starting-line-number=1}
+```
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Hello, {{ t_planet }}</h1>
+
+{% endblock %}
+```
+
+Save the file[^3] and now click on the “Hello” link on the index page in the browser. You should now see the “Hello, 4” letters in red.
+
+![Figure 3.10.1](images/3.10.1.png)
+
+We can have more than one block in a template, and we can also set a default content for that block on the parent template. Let’s do these things to fix an issue we have now with the `<title>` tag.
+
+If you check on the browser’s tab, you’ll see that both the index and the hello pages have the same title: “Index Page”.
+
+![Figure 3.10.2](images/3.10.2.png)
+
+It’s very important that each individual page has its own title, specially when search engines crawl our pages. 
+
+That attribute is set on the `base.html` `<title>` tag. So let’s make this the default to be “Index Page”, if the extending template doesn’t pass it, but something else if it is passed. So  change this line to the following:
+
+{lang=html,line-numbers=on,starting-line-number=3}
+```
+<title>{% block title %}Index Page{% endblock %}</title>
+```
+
+Save it[^4] and then open `hello.html` and add the following after the “extends” statement but before the block content:
+
+{lang=html,line-numbers=on,starting-line-number=3}
+```
+{% block title %}Hello{% endblock %}
+```
+
+Save the file[^5] and now you’ll notice each page has a different title, as they should.
+
+
+
+
+
+[^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/tree/step-14/templates
+
+[^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/tree/step-15/templates
+
+[^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-16/templates/hello.html
+
+[^4]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-17/templates/base.html
+
+[^5]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-17/templates/hello.html
