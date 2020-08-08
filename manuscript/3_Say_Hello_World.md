@@ -292,7 +292,7 @@ Before we move to the next lesson, go ahead and delete line 6, so that our appli
 
 [^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-2/hello.py
 
-# Templates <!-- 3.7 -->
+## Templates <!-- 3.7 -->
 As you build your application, the pages we return to the user will start getting more and more complicated. It would get pretty messy if you had each function with a return variable several dozen lines long.
 
 So most web frameworks work using a design pattern called Model-View-Controller, or MVC.
@@ -393,7 +393,7 @@ Save both files[^2] and head over to that URL using any number you want. Now try
 
 [^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/tree/step-8
 
-# The url\_for() Function <!-- 3.8 -->
+## The url\_for() Function <!-- 3.8 -->
 One thing you will do often in your templates and controllers will be to put links to other pages.
 
 So for example, let’s add a link from the index page to the hello page in our application.
@@ -455,7 +455,7 @@ Save the file[^4] and reload the Index page. You will see the link works perfect
 
 [^4]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-12/hello.py
 
-# The Static Folder <!-- 3.9 -->
+## The Static Folder <!-- 3.9 -->
 There are certain files that don’t need to be processed by our controller, because they’re always the same. The majority of these are presentation-centric files, like CSS or JavaScript files that improve the user interaction.
 
 Flask reserves a folder for these called `static`, and just like the `templates` folder, it’s a special folder.
@@ -520,7 +520,7 @@ Save the file[^3] and reload the browser. You should see the same output, but yo
 
 [^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-13/templates/index.html
 
-# Template inheritance <!-- 3.10 -->
+## Template inheritance <!-- 3.10 -->
 If you’re still on the index page of the application and click on the “Hello” link, you’ll notice our “Hello” page’s title didn’t change to red like the one on `index.html`.
 
 That’s because our `hello.html` file is not including the CSS static file.
@@ -629,3 +629,271 @@ Save the file[^5] and now you’ll notice each page has a different title, as th
 [^4]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-17/templates/base.html
 
 [^5]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-17/templates/hello.html
+
+## Introduction to Forms <!-- 3.11 -->
+One of the main functionalities an application has is the ability to receive input from its users.
+
+To do this, the HTTP protocol, which is the definition of how web pages work, specifies a set of commands, defined as _verbs_.
+
+There are a number of HTTP verbs that do different operations, but the ones we’ll see in this lesson are `GET` and `POST`.
+
+### The GET Method <!-- 3.11.1 -->
+The `GET` method allows you to send the user input from the webpage back to your application using the URL itself.
+
+For example, let’s say we are writing a form the user needs to fill with their first name and last name.
+
+The `GET` URL for that operation could look like this:
+
+```
+http://example.com/form?first_name=John&last_name=Smith
+```
+
+See how we can see the variables in the URL? The one thing you need to remember is to start the list of field/value pairs, or query parameters, with a question mark.
+
+Flask can read these parameters. Let’s try that.
+
+Head over to `hello.py` and let’s create a new route that will read these parameters from the `GET` request.
+
+Add the following code:
+
+{lang=python,line-numbers=on,starting-line-number=12}
+```
+@app.route('/form', methods=['GET'])
+def form():
+    first_name = request.args['first_name']
+    last_name = request.args['last_name']
+    return f'First Name: {first_name}, Last Name: {last_name}'
+```
+
+And in line 1 add `request` to the import list:
+
+{lang=python,line-numbers=on,starting-line-number=1}
+```
+from flask import Flask, render_template, request
+```
+
+Save the file[^1] and then enter this on your browser:
+
+```
+http://localhost:5000/form?first_name=John&last_name=Smith
+```
+
+You will see the variables have been received properly in the application.
+
+Notice how we added the new `methods` parameter on the route? This is a list of acceptable HTTP methods that can interact with this view. Since we want to read GET parameters, we added the GET method here.
+
+Also notice that we are expecting both values to be present, `first_name` and `last_name`, because we’re using the parameters without a list `get` method, which you shouldn’t confuse with the GET HTTP method.
+
+So for example, if you only pass `first_name` on the parameters in the URL like this:
+
+```
+http://localhost:5000/form?first_name=John
+```
+
+And hit enter, you’ll get a 400 error (Bad Request). To avoid that you can use:
+
+{lang=python,line-numbers=on,starting-line-number=14}
+```
+     first_name = request.args.get('first_name')
+     last_name = request.args.get('last_name')
+```
+
+Save the file[^2], then stop the Flask server and restart, as the contents of the page might have been cached by the browser.
+
+### HTML Forms <!-- 3.11.2 -->
+Now of course you don’t expect users to type their first name and last name directly on the URL bar. It would be better to render a nice form for the user.
+
+We can do that using HTML, so let’s create a new template on the templates folder called “form.html”.
+
+An HTML form is defined using the `<form>` open and close tags. Anything inside these tags will be considered part of the form.
+
+So start with:
+
+{lang=html,line-numbers=on,starting-line-number=1}
+```
+<form>
+</form>
+```
+
+Next we’ll add our fields, for that we use the `<input>` tags. So let’s add the `first_name` and `last_name` inputs between the form tags.
+
+{lang=html,line-numbers=on,starting-line-number=2}
+```
+  <input type="text" name="first_name">
+  <input type="text" name="last_name">
+```
+
+Input has a type, in this case these are “text” fields. There’s other types we’ll see in the course. You also want to add a “name” which is how the variable name will be passed to our application.
+
+In order for the user to actually send the data, we need a button, so add the following:
+
+{lang=html,line-numbers=on,starting-line-number=4}
+```
+  <input type="submit" name="submit">
+```
+
+This looks good, but we’re missing something important. We need to tell the form to which route to send this when the user presses submit. So add the following to the form tag.
+
+{lang=html,line-numbers=on,starting-line-number=1}
+```
+<form action="/form">
+```
+
+But wait, remember I told you to never hardcode any URLs on your  templates? That includes the form actions, so let’s replace that with:
+
+{lang=html,line-numbers=on,starting-line-number=1}
+```
+<form action="{{ url_for('form') }}">
+```
+
+So our whole form looks like this:
+```html
+<form action="{{ url_for('form') }}">
+  <input type="text" name="first_name">
+  <input type="text" name="last_name">
+  <input type="submit" name="Submit">
+</form>
+```
+
+Save the `form.html` file[^3] and now head over to`hello.py` and replace the `form` route with the following code:
+
+{lang=python,line-numbers=on,starting-line-number=12}
+```
+@app.route('/form', methods=['GET'])
+def form():
+    if request.args.get('submit'):
+        first_name = request.args.get('first_name')
+        last_name = request.args.get('last_name')
+        return f'First Name: {first_name}, Last Name: {last_name}'
+    return render_template('form.html')
+```
+
+So what’s happening here?
+
+First we check if the query parameter list has a `submit` variable. This only happens after we press the submit button. If we see that, then we read the query parameters `first_name` and `last_name` and print it out in the screen. However, the first time we hit the page, we won’t have the `submit` query parameter, so the `if` condition fails and we render the form template.
+
+Save the file[^4] and stop and start the Flask server, just in case. I’ll explain why we need to do this in a bit.
+
+So now if you head over to `http://localhost:5000/form` you will see the form is rendered.
+
+![Figure 3.11.2.1](images/3.11.2.1.png)
+
+Now enter a first name and last name and press submit. You’ll see the variables printed out.
+
+![Figure 3.11.2.2](images/3.11.2.2.png)
+
+### The POST Method <!-- 3.11.3 -->
+The POST method is different from the GET method in a couple of important ways:
+
+- GET sends the data using the URL, POST sends data using the body of the request, so it’s hidden from the user, which makes it better to send sensitive or private data. 
+- There’s also a limit to the data you send in GET requests. no limit for POST
+- GET requests are cached by the browser, useful to represent  a _state_ of the application, POST requests are not cached by the browser
+
+So let’s change the form to use POST instead of GET, as `first_name` and `last_name` might be sensitive information we don’t want to be passing publicly on the URL.
+
+First we add a `method` parameter to the `form` tag in `form.html`, so that it looks like this:
+
+{lang=python,line-numbers=on,starting-line-number=1}
+```
+<form action="{{ url_for('form') }}" method="POST">
+```
+
+Save the file[^5]. Now we need to modify the route on `hello.py` and add a `POST` method:
+
+{lang=python,line-numbers=on,starting-line-number=11}
+```
+@app.route('/form', methods=['GET', 'POST'])
+```
+
+We leave the `GET` method because the first time you hit the page to render the form, it’s actually a `GET` request.
+
+Now to check if the user submitted data, we change the `if` to read like this:
+
+{lang=python,line-numbers=on,starting-line-number=14}
+```
+if request.method == 'POST':
+```
+
+This condition will only be true when the user presses “Submit” on a form that uses the `POST` method.
+
+Finally, to read the data, we’ll use a different `request` method called `form`:
+
+{lang=python,line-numbers=on,starting-line-number=15}
+```
+	first_name = request.form.get('first_name')
+  last_name = request.form.get('last_name')
+```
+
+Save the file[^6] and restart the `flask` server.
+
+Now go to the form URL and notice how when you submit, the values are not displayed on the URL any more.
+
+![Figure 3.11.3.1](images/3.11.3.1.png)
+
+### Using `request.values` <!-- 3.11.4 -->
+There’s a third way to read the values of a form, and that’s using `request.values`. 
+
+Just change the two variable assignments to read like this:
+
+{lang=python,line-numbers=on,starting-line-number=15}
+```
+		first_name = request.values.get('first_name')
+    last_name = request.values.get('last_name')
+```
+
+Save the file[^7] and restart the server. You should get the same result.
+
+The cool thing about `request.values`is that it reads both `GET` and `POST` data, so you don’t have to use `args` or `form` on the `request` assignment, so that’s convenient.
+
+### Redirects after Form Submits <!-- 3.11.5 -->
+When the operation after you hit “Submit” alters the database in any way, it’s not good to allow the user to just hit reload over and over on that page, because that would create multiple identical records.
+
+For example, let’s say the `first_name` and `last_name` in the previous example was to create a new user account. So when we land on the section where we fetch the variables, and a database record is created, a user can then hit reload 100 times and create 100 accounts.
+
+So it’s always good practice to send the user to a “thank you” page after the form is submitted. That way the user can reload that page and nothing happens.
+
+So we could do something like this on the `form` route:
+
+{lang=python,line-numbers=on,starting-line-number=14}
+```
+if request.method == 'POST':
+        first_name = request.values.get('first_name')
+        last_name = request.values.get('last_name')
+        return redirect(url_for('registered'))
+```
+
+That last line will redirect the browser to a route called `registered`. Let’s create that:
+
+{lang=python,line-numbers=on,starting-line-number=20}
+```
+@app.route('/thank_you')
+def registered():
+    return 'Thank you!'
+```
+
+We need to add both `redirect` and `url_for` to the file, so on line 1 add:
+
+{lang=python,line-numbers=on,starting-line-number=1}
+```
+from flask import Flask, render_template, request, redirect, url_for
+```
+
+Save the file[^8] and hit `/form` on your browser. You will see how after you submit, you’re taken to the new URL `thank_you`. You can reload this page over and over and no new records would be created.
+
+![Figure 3.11.5.1](images/3.11.5.1.png)
+
+[^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-18/hello.py
+
+[^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-19/hello.py
+
+[^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-20/templates/form.html
+
+[^4]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-20/hello.py
+
+[^5]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-21/templates/form.html
+
+[^6]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-21/hello.py
+
+[^7]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-22/hello.py
+
+[^8]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-23/hello.py
