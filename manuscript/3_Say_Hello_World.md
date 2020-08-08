@@ -942,9 +942,9 @@ Then modify the POST section to look like this:
 
 {lang=python,line-numbers=on,starting-line-number=17}
 ```
-  response = make_response(redirect(url_for('registered')))
-  response.set_cookie('first_name', first_name)
-  return response
+        response = make_response(redirect(url_for('registered')))
+        response.set_cookie('first_name', first_name)
+        return response
 ```
 
 So what we’re doing here is “catching” the redirect on a variable called `response`, and then set the cookie called `first_name` on the response itself. Finally we return the whole thing to the browser.
@@ -953,8 +953,8 @@ Then, on the `thank_you` page, we can read the cookie from the request and displ
 
 {lang=python,line-numbers=on,starting-line-number=24}
 ```
-	first_name = request.cookies.get('first_name')
-  return f'Thank you, {first_name}!'
+    first_name = request.cookies.get('first_name')
+    return f'Thank you, {first_name}!'
 ```
 
 This is something you need to remember and that you will probably miss the first few times you use cookies: Cookies are set in one page and are available only when you either reload the page or go to another page. 
