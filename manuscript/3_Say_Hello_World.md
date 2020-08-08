@@ -747,7 +747,9 @@ But wait, remember I told you to never hardcode any URLs on your  templates? Tha
 ```
 
 So our whole form looks like this:
-```html
+
+{lang=html,line-numbers=on,starting-line-number=1}
+```
 <form action="{{ url_for('form') }}">
   <input type="text" name="first_name">
   <input type="text" name="last_name">
@@ -820,7 +822,7 @@ Finally, to read the data, we’ll use a different `request` method called `form
 
 {lang=python,line-numbers=on,starting-line-number=15}
 ```
-	first_name = request.form.get('first_name')
+  first_name = request.form.get('first_name')
   last_name = request.form.get('last_name')
 ```
 
@@ -897,3 +899,114 @@ Save the file[^8] and hit `/form` on your browser. You will see how after you su
 [^7]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-22/hello.py
 
 [^8]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-23/hello.py
+
+## Cookies and Sessions <!-- 3.12 -->
+HTTP is called a “stateless protocol” because the server only sees each individual page hit as a stand alone operation. There’s no “history” of where the user was before.
+
+A perfect example was the last section of our code in the previous lesson. Remember how we sent the user to the “thank you” page after the form was submitted?
+
+Let’s say we wanted to display back the message “Thank you, John” on that page, instead of just “Thank you!”. There’s two ways to do that.
+
+The first is to somehow append to the URL some sort of information on the redirect. That could be the message we want to display, like this:
+
+```
+http://localhost:5000/thank_you?name=John
+```
+
+Or if we had stored the user in a database after the POST occurred, we could pass the user’s ID on the database:
+
+```
+http://localhost:5000/thank_you?userid=123
+```
+
+Both of these methods are somewhat insecure, because we’re revealing information on the URL that could be cached by the browser or potentially exploited by a hacker.
+
+The second way which would be more secure is to use a cookie.
+
+So what’s a cookie exactly?
+
+Cookies are part of the HTTP Protocol, and essentially they allow you to store bits of information on the user’s computer that can be read by your website after they’ve been set.
+
+For example, if you go to Amazon.com and you log in, Amazon stores a cookie with your user ID, and after that, any page you hit gets that user ID back, thus allowing you to see your order history or purchase something with your credit card. But then, if you go to Walmart.com, that website won’t see the Amazon.com cookie. It creates its own new local file for Walmart.
+
+Let’s try setting a cookie for our “Thank You” page.
+
+First, on line 1, add `make_response` at the end, like this:
+```python
+from flask import Flask, render_template, request, redirect, url_for, make_response
+```
+
+Then modify the POST section to look like this:
+```python
+		response = make_response(redirect(url_for('registered')))
+        response.set_cookie('first_name', first_name)
+        return response
+```
+
+So what we’re doing here is “catching” the redirect on a variable called `response`, and then set the cookie called `first_name` on the response itself. Finally we return the whole thing to the browser.
+
+Then, on the `thank_you` page, we can read the cookie from the request and display it back:
+```python
+	first_name = request.cookies.get('first_name')
+    return f'Thank you, {first_name}!'
+```
+
+This is something you need to remember and that you will probably miss the first few times you use cookies: Cookies are set in one page and are available only when you either reload the page or go to another page. 
+
+When you first set your cookie, you won’t be able to read in the same page you set it.
+
+Now save the file[^1] and check it out.
+
+![The John cookie](Screen%20Shot%202018-05-10%20at%208.01.15%20AM.png)
+
+Notice how we don’t see the name “John” anywhere on the URL.
+
+There is a downside to this method, and that is related to security. We’ll see that next.
+
+## Sessions
+Cookies are stored in the local user’s hard drive unencoded, i.e., if you knew the folder where your cookies are stored, you would find there’s a text file where you can read that the `first_name` cookie is set to “John”.
+
+Now it’s hard for someone to gain access to your computer, but not impossible. And imagine if we not only had your first name, but also your credit card number or your government ID number? They would be lying around your hard drive, unprotected.
+
+Sessions come to the rescue. A session is essentially a randomly generated string stored as a cookie in your local computer that points to the actual data in the website’s server. But the data in the website is also encrypted, which makes it really hard to decode.
+
+So let’s change our code to use sessions instead.
+
+First, replace `make_response` with `session`.
+
+Next we need to add a secret key. Remember how I explained that the session data is encrypted on the server side? For that to work we need to set a randomly generated long string, sort of like a password, that Flask can then use as a unique method to encrypt the data, different from any other Flask application.
+
+So add the following line after your `app` instantiation:
+```python
+app.secret_key = 'my_secret_password'
+```
+
+Now that’s not a very secure key, but it’ll do for now.
+
+Next, change the POST code to look like the following:
+```python
+		first_name = request.values.get('first_name')
+        last_name = request.values.get('last_name')
+        session['first_name'] = first_name
+        return redirect(url_for('registered'))
+```
+
+Notice how the Flask `session` is a dictionary. We can store any data we want using any key we want. At that point Flask will create the session’s corresponding cookie in the user’s local filesystem.
+
+Finally on the `thank_you` page, you can retrieve the value for the `first_name` session by doing:
+```python
+first_name = session.get('first_name')
+```
+
+Save the file[^2] and check it out. Works exactly the same.
+
+If you want to generate a more secure secret key, just run this command in your terminal:
+```
+python -c 'import os; print(os.urandom(16))'
+```
+
+Then copy and paste the contents between the single quotes.
+
+[^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-24/hello.py
+
+[^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-25/hello.py
