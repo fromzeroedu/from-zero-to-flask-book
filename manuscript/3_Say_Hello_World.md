@@ -1029,3 +1029,164 @@ Then copy and paste the contents between the single quotes.
 [^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-24/hello.py
 
 [^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-25/hello.py
+
+## Configuration Management <!-- 3.13 -->
+As you continue building applications you will quickly learn that the settings required to develop in your laptop are different from the ones used in the server that actually runs your site to the world. Typically these different states of the app are called _environments_. 
+
+In a simple development workflow you would have at least two environments: _development_ sometimes called _dev_ which is the environment you develop on in your local computer or laptop and another environment called _production_ or _prod_ that is the one your public application resides on.
+
+It’s also important for your application to track which libraries are required and their correct versions. Remember when we installed Flask using `pip` earlier? We specified version 1.0.2.
+
+However when another developer installs your code, he doesn’t have any indication that this is the version number of Flask, or even that we need Flask to run it.
+
+### Requirements.txt <!-- 3.13.1 -->
+To track the libraries we use a file called `requirements.txt` that lists all the packages and the versions we need.
+
+So create a file called `requirements.txt` on the root folder of the application and write:
+
+{lang=python,line-numbers=on,starting-line-number=1}
+```
+Flask==1.0.2
+```
+
+Save the file[^1] and now, on the terminal, whenever you add new packages, you run the following command:
+
+{lang=bash,line-numbers=off}
+```
+$ (venv) pip install -r requirements.txt
+```
+
+But remember — and this is critically important  — make sure your virtual environment is activated before you run `pip install` or you will install these packages across all applications.
+
+This command tells `pip` to install all the libraries and its dependencies listed in the file. This will come handy down the road when we install other libraries.
+
+If you run this now, it won’t do anything, as Flask was previously installed. But now we have the information on our codebase if our application is used by someone else.
+
+### Environment Settings <!-- 3.13.2 -->
+Flask version 1.0 introduced a new way to better handle the environment states using a library called `python-dotenv`.
+
+With `python-dotenv` we can store all the environment settings we need in an individual file so that we don’t have to worry about adding them to our codebase. Typically these environment files would be kept outside of our Git repository with a `gitginore` and would vary between the different environments.
+
+As usual, we do it differently in Windows or Mac and PythonAnywhere, so skip to the video that makes sense to you.
+
+#### Python Dot Env for Windows and Mac <!-- 3.13.2.1 -->
+So first, we need to install `python-dotenv`, so add it to the `requirements.txt` file:
+
+{lang=python,line-numbers=on,starting-line-number=2}
+```
+python-dotenv==0.8.2
+```
+
+Save the file[^2], go to your terminal, making sure your virtual environment is activated, and do a pip install:
+
+{lang=bash,line-numbers=off}
+```
+$ pip install -r requirements.txt
+```
+
+<!-- editing point here -->
+Next add a `settings.py` file on the root app directory that looks like this:
+
+{lang=python,line-numbers=on,starting-line-number=1}
+```
+import os
+SECRET_KEY = os.getenv('SECRET_KEY')
+```
+
+This will allow us to read the environment variables that `python-dotenv` will push from the env file to the operating system.
+
+Save the file[^3] and next open the `hello.py` file and change line 4 to read:
+
+{lang=python,line-numbers=on,starting-line-number=4}
+```
+app.config.from_pyfile('settings.py')
+```
+
+This will tell Flask that we want to load our application settings from the `settings.py` file.
+
+Save the file[^4] and finally create a `.flaskenv` file in the same directory, that looks like this:
+
+{lang=python,line-numbers=on,starting-line-number=1}
+```
+FLASK_APP='hello.py'
+FLASK_ENV=development
+SECRET_KEY='my_secret_key'
+```
+
+Notice we are passing the `FLASK_APP` environment variable we had to set up manually before as well as a new `FLASK_ENV` variable. This tells Flask if we’re in a development or production environment. If it’s a development environment, it automatically turns `DEBUG` mode on for us. 
+
+It’s okay to put the actual `SECRET_KEY` here. Remember, this `.flaskenv` file will not be saved in other computers or committed to the repository. Save the file[^5].
+
+Now you can test that all is working by completely closing the terminal and opening it again. Go to the `simple_flask_app` directory, activate your virtual environment, and type `flask run`.
+
+The application now runs in debug mode without needing to set any environment variables. Cool, huh?
+
+#### Python Dot Env for PythonAnywhere <!-- 3.13.2.2 -->
+So first, we need to install `python-dotenv`, so add it to the `requirements.txt` file:
+```python
+python-dotenv==0.8.2
+```
+
+Save the file[^6], then open a bash, making sure your virtual environment is activated, and do a pip install:
+```
+$ cd opt/simple_flask_app
+$ workon simple_flask_app
+$ pip install -r requirements.txt
+```
+
+Next add a `settings.py` file on the root app directory that looks like this:
+```python
+import os
+SECRET_KEY = os.getenv('SECRET_KEY')
+```
+
+This will allow us to read the environment variables that `python-dotenv` will push from the env file to the operating system.
+
+Save the file[^7] and next open the `hello.py` file and change line 4 to read:
+```python
+app.config.from_pyfile('settings.py')
+```
+
+This will tell Flask that we want to load our application settings from the `settings.py` file.
+
+Save the file[^8] and finally create a `.flaskenv` file in the same directory, that looks like this:
+```python
+SECRET_KEY='my_secret_key'
+```
+
+It’s okay to put the actual `SECRET_KEY` here. Remember, this `.flaskenv` file will not be saved in other computers or committed to the repository. Save the file[^9].
+
+We need one final step and that is to add `python-dotenv` to the `wsgi` file, so add this in line 1:
+```python
+import os, sys
+from dotenv import load_dotenv
+```
+
+And right before the `app` import add:
+```python
+load_dotenv(os.path.join(path, '.flaskenv'))
+```
+
+Save the file[^10], reload the web app and navigate to the `/form` and try submitting the data.
+
+It should work just like before.
+
+[^1]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-26/requirements.txt
+
+[^2]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-27/requirements.txt
+
+[^3]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-27/settings.py
+
+[^4]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-27/hello.py
+
+[^5]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-27/.flaskenv
+
+[^6]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-27/requirements.txt
+
+[^7]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-27/settings.py
+
+[^8]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-27/hello.py
+
+[^9]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-27pa/.flaskenv
+
+[^10]:	https://github.com/fromzeroedu/itfc-simple-flask-app/blob/step-27/pa\_wsgi.py
